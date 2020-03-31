@@ -1,0 +1,48 @@
+#https://github.com/helm/charts/tree/master/stable/fluent-bit
+
+# Minikube stores its logs in a separate directory.
+# Enable if you install the chart in minikube.
+on_minikube: true
+
+
+backend:
+  type: es
+  es:
+    host: elastic-logs-master
+    port: 9200
+    logstash_prefix: logstash    
+    retry_limit: 5
+    time_key: "@timestamp" #https://github.com/fluent/fluent-bit/issues/628
+
+
+
+# We exclude kube things like dashboard
+# In filter we remove Logs field if it was json and got merged
+extraEntries:
+  input: |-
+    Exclude_Path   /var/log/containers/kibana*.log,/var/log/containers/kube*.log,/var/log/containers/etcd-*.log,/var/log/containers/dashboard-metrics*.log
+#     # >=1 additional Key/Value entrie(s) for existing Input section
+  audit: |-
+#     # >=1 additional Key/Value entrie(s) for existing Input section
+  filter: |-
+    Keep_Log  off
+#     # >=1 additional Key/Value entrie(s) for existing Filter section
+  output: |-
+#     # >=1 additional Key/Value entrie(s) for existing Ouput section
+# WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+input:
+  tail:
+    path: /var/log/containers/*.log
+    ignore_older: 1h
+    
+filter:
+# If true, check to see if the log field content is a JSON string map, if so,
+# it append the map fields as part of the log structure.
+# https://github.com/fluent/fluent-bit/issues/628
+  mergeJSONLog: true
+# If set, all unpacked keys from mergeJSONLog (Merge_Log) will be packed under
+# the key name specified on mergeLogKey (Merge_Log_Key)
+  mergeLogKey: "app"

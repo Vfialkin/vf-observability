@@ -1,0 +1,44 @@
+﻿#create pmvs (not for minikube)
+#kubectl apply -f .\PersistentVolumes.yaml  --namespace observability
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: logs-pv-0
+spec:
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /usr/share/elasticsearch/data
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  volumeMode: Filesystem
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: logs-pv-1
+spec:
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /usr/share/elasticsearch/data
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  volumeMode: Filesystem
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: logs-pv-2
+spec:
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /usr/share/elasticsearch/data
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  volumeMode: Filesystem

@@ -1,0 +1,51 @@
+﻿#full list of values 
+#https://github.com/elastic/helm-charts/blob/master/elasticsearch/values.yaml
+---
+
+clusterName: "elastic-logs"
+
+#no dedicated master node
+masterService: ""
+#we dont need more then one on local
+minimumMasterNodes: 1
+#if you set 1 replica - cluster will alway be yellow because it will fail to replicate shards
+replicas: 2
+
+elasticsearch.logLevel: warn
+
+# default is green, but if some shard failed you wont be able to access it to fix it ;)
+clusterHealthCheckParams: wait_for_status=yellow&timeout=1s
+
+# Permit co-located instances for solitary minikube virtual machines.
+antiAffinity: "soft"
+
+# Shrink default JVM heap
+esJavaOpts: "-Xmx256m -Xms256m"
+
+# Shrink default resourses
+resources:
+  requests:
+    cpu: "250m"
+    memory: "512Mi"
+
+# Request smaller persistent volumes.
+volumeClaimTemplate:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: "standard"
+  resources:
+    requests:
+      storage: 200M
+
+#[optional] expose service outside 
+ingress:
+  enabled: true
+  path: /elastic-logs
+
+service:
+  labels: {}
+  labelsHeadless: {}
+  type: NodePort
+  nodePort: 30922
+  annotations: {}
+  httpPortName: http
+  transportPortName: transport

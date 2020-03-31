@@ -1,0 +1,48 @@
+﻿#full list of values 
+#https://github.com/elastic/helm-charts/blob/master/elasticsearch/values.yaml
+---
+
+clusterName: "elastic-logs"
+
+#no dedicated master node
+masterService: ""
+#if you set 1 replica - cluster will alway be yellow because it will fail to replicate shards
+replicas: 2
+minimumMasterNodes: 1
+
+elasticsearch.logLevel: warn
+
+antiAffinity: "hard"
+esJavaOpts: "-Xmx256m -Xms256m"
+# Shrink default resourses
+resources:
+  requests:
+    cpu: "250m"
+    memory: "512Mi"           
+volumeClaimTemplate:
+  accessModes: 
+    - ReadWriteOnce
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 1000M
+      
+podSecurityContext:
+  fsGroup: 1000
+  runAsUser: 1000      
+ 
+persistence:
+  enabled: true
+  
+ingress:
+  enabled: true
+  path: /elastic-logs  
+
+service:
+  labels: {}
+  labelsHeadless: {}
+  type: NodePort
+  nodePort: 30922
+  annotations: {}
+  httpPortName: http
+  transportPortName: transport

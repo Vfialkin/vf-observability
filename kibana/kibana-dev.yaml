@@ -1,0 +1,20 @@
+#https://github.com/elastic/helm-charts/tree/master/kibana
+---
+
+elasticsearchHosts: "http://elastic-logs-master:9200"
+
+ingress:
+  enabled: true
+  path: /kibana-logs
+  hosts:
+    - dev.kibana-logs.com
+  tls: []  
+  
+service:
+  labels: {}
+  labelsHeadless: {}
+  type: NodePort
+  nodePort: 30562
+  annotations: {}
+  httpPortName: http
+  transportPortName: transport
