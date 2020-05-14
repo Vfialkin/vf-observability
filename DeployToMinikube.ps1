@@ -6,6 +6,7 @@ kubectl config use-context minikube
 
 # check if its running
 Write-Output "Checking kube status..."
+$status= minikube status
 if ($status -like '*Misconfigured*'  -Or $status -like '*Stopped*') 
 {
     throw $status
