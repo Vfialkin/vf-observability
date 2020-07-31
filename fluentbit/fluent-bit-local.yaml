@@ -1,5 +1,3 @@
-#https://github.com/helm/charts/tree/master/stable/fluent-bit
-
 # Minikube stores its logs in a separate directory.
 # Enable if you install the chart in minikube.
 on_minikube: true
@@ -20,7 +18,6 @@ backend:
 # In filter we remove Logs field if it was json and got merged
 extraEntries:
   input: |-
-    Exclude_Path   /var/log/containers/kibana*.log,/var/log/containers/kube*.log,/var/log/containers/etcd-*.log,/var/log/containers/dashboard-metrics*.log
 #     # >=1 additional Key/Value entrie(s) for existing Input section
   audit: |-
 #     # >=1 additional Key/Value entrie(s) for existing Input section
@@ -37,6 +34,7 @@ input:
   tail:
     path: /var/log/containers/*.log
     ignore_older: 1h
+    exclude_path: /var/log/containers/kibana*.log,/var/log/containers/kube*.log,/var/log/containers/etcd-*.log,/var/log/containers/dashboard-metrics*.log
     
 filter:
 # If true, check to see if the log field content is a JSON string map, if so,
